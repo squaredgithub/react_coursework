@@ -1,81 +1,38 @@
 import './App.css';
 
-import States from './states_hooks';
-
-import {User} from './User'
-
-function App() {
-
-  //jsx starts here
-  const name = "njuguna";
-  const age = "22";
-  const age1 = 17;
-  const email = "test@gmail.com";
-  const isGreen =true;
-  const user = (
-   <div>
-    {name}
-    {age}
-    {email}
-   </div>
-   
-  ); 
-  const users = [
-    {name: "Omusula", age: 22},
-    {name: "Willy", age: 23},
-    {name: "Paul", age: 20},
-  ];
-  return (
-    <div className="App">
-
-      <States />
-       <User />
-
-       {user}
-       {user}
-       {user}
-       <Work salary={6000} pos="se" compa="Google" />
-       <Work salary={9000} pos="sales" compa="Microsoft" />
-       {users.map((user, key) => {
-      return <User name={user.name} age={user.age} />
-    })}
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Home from './pages/Home';
+import All from './pages/All';
+import Nav from './Nav';
+import Profile from './pages/Profile';
+import Contact from './pages/Contact';
+import { createContext, useState } from 'react';
 
 
-       {age1 >= 18 ? <h1> OVER AGE</h1> : <h1> under age</h1>}
-
-       <h1 style ={{color: isGreen ? "green" : "red" }}>THIS HAS COLOR</h1>
-       {isGreen && <button>This is a button</button>}
-
-       
-    
+export const AppContext = createContext(); 
 
 
-    </div>
-  );
-}
-//function
-// const getName = () =>{
-//   return "njuguna"
-// };
-//components start with capital
-// const User = () =>{
-//   return <h1>njuguna</h1>
-// }; 
+const App = () => {
+  const [username , setUsername] = useState("njuguna");
 
-const Work = (props) =>{
+
   return (
     <div>
-      <h1>{props.salary}</h1>
-      <h1>{props.pos}</h1>
-      <h1>{props.compa}</h1>
-
+      <AppContext.Provider value={{ username, setUsername}}>
+      <Router> 
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home  />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/all" element={<All />} />
+          <Route path="*" element={<h1> Page not found</h1>} />
+        </Routes>
+      </Router>
+      </AppContext.Provider>
     </div>
-  );
-}; 
+  )
+}
 
-
- 
-
-
-
-export default App;
+export default App
